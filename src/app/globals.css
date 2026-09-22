@@ -1,0 +1,361 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #01030a;
+  color: #f4f6fb;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-root {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #01030a;
+}
+
+.scene-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.scene-layer canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+}
+
+.ui-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute;
+  top: clamp(20px, 4vw, 48px);
+  left: clamp(20px, 4vw, 48px);
+  pointer-events: none;
+}
+
+.hud__title {
+  margin: 0;
+  font-size: clamp(20px, 2.6vw, 32px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  color: #f7f9ff;
+  text-shadow: 0 0 24px rgba(140, 180, 255, 0.25);
+}
+
+.hud__subtitle {
+  margin: 10px 0 0;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(220, 228, 245, 0.55);
+}
+
+/* ---------- Progress Scale ---------- */
+.scale-panel {
+  position: absolute;
+  top: clamp(20px, 4vw, 48px);
+  right: clamp(20px, 4vw, 48px);
+  bottom: clamp(20px, 4vw, 48px);
+  width: clamp(150px, 14vw, 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 18px;
+  pointer-events: none;
+  border-radius: 14px;
+  transition: box-shadow 0.3s ease;
+}
+
+.scale-panel__stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.scale-panel__label {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: rgba(210, 220, 245, 0.5);
+  text-transform: uppercase;
+}
+
+.scale-panel__label--target {
+  margin-top: 14px;
+}
+
+.scale-panel__value {
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 18px rgba(140, 180, 255, 0.35);
+}
+
+.scale-panel__target {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(230, 236, 250, 0.75);
+}
+
+.scale-panel__percent {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8fc7ff;
+  letter-spacing: 0.05em;
+}
+
+.scale-track {
+  position: relative;
+  flex: 1;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  margin-right: 26px;
+}
+
+.scale-track__fill {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 0%;
+  background: linear-gradient(180deg, #dfeeff, #6fa8ff);
+  box-shadow: 0 0 12px rgba(140, 190, 255, 0.7);
+  border-radius: 2px;
+  transition: height 0.1s linear;
+}
+
+.scale-tick {
+  position: absolute;
+  right: -6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateY(50%);
+}
+
+.scale-tick:nth-child(2) {
+  bottom: 100%;
+}
+.scale-tick:nth-child(3) {
+  bottom: 75%;
+}
+.scale-tick:nth-child(4) {
+  bottom: 50%;
+}
+.scale-tick:nth-child(5) {
+  bottom: 25%;
+}
+.scale-tick:nth-child(6) {
+  bottom: 0%;
+}
+
+.scale-tick__mark {
+  width: 8px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.scale-tick__label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(220, 228, 245, 0.55);
+  white-space: nowrap;
+}
+
+/* ---------- Contract Bar ---------- */
+.contract-bar {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 3vw, 28px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(6, 10, 20, 0.55);
+  backdrop-filter: blur(14px);
+  border-radius: 999px;
+  pointer-events: auto;
+  max-width: min(92vw, 640px);
+}
+
+.contract-bar__info {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+}
+
+.contract-bar__label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(210, 220, 245, 0.5);
+  flex-shrink: 0;
+}
+
+.contract-bar__address {
+  font-size: 12px;
+  color: rgba(235, 240, 250, 0.85);
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.contract-bar__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.contract-bar__btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4f6fb;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.contract-bar__btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.contract-bar__btn--primary {
+  background: rgba(140, 190, 255, 0.14);
+  border-color: rgba(140, 190, 255, 0.4);
+  color: #cfe4ff;
+}
+
+.contract-bar__btn--primary:hover {
+  background: rgba(140, 190, 255, 0.24);
+}
+
+/* ---------- Milestone / cinematic ---------- */
+.cinematic-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.85), rgba(180, 210, 255, 0.1) 55%, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.milestone-toast {
+  position: absolute;
+  left: 50%;
+  top: clamp(70px, 10vw, 110px);
+  transform: translateX(-50%);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: #cfe4ff;
+  text-shadow: 0 0 16px rgba(140, 190, 255, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.reached-banner {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(24px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  text-shadow: 0 0 40px rgba(180, 210, 255, 0.85), 0 0 90px rgba(140, 180, 255, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+}
+
+.zoom-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(72px, 9vw, 96px);
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(220, 228, 245, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .scale-panel {
+    width: 128px;
+    gap: 12px;
+  }
+
+  .scale-panel__value {
+    font-size: 16px;
+  }
+
+  .scale-track {
+    margin-right: 18px;
+  }
+
+  .contract-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    border-radius: 18px;
+    padding: 12px 16px;
+  }
+
+  .contract-bar__actions {
+    justify-content: center;
+  }
+
+  .hud__title {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 2200px) {
+  .hud__title {
+    font-size: 40px;
+  }
+
+  .scale-panel {
+    width: 220px;
+  }
+}
