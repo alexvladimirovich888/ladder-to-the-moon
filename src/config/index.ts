@@ -4,11 +4,11 @@ export const SITE_CONFIG = {
 };
 
 export const TOKEN_CONFIG = {
-  contractAddress: "3wMj4yBCGoV4fBJKdhHHCP9ZR1npcoBb6FQpCbSLpump",
+  contractAddress: "Ers7WdcTifngX9MSjmSiQ7fDTy2TSiCXZ5W962YQpump",
   targetMarketCap: 1_000_000,
   // Change this to the real Axiom trade URL for this token when available.
   axiomUrl:
-    "https://axiom.trade/t/3wMj4yBCGoV4fBJKdhHHCP9ZR1npcoBb6FQpCbSLpump",
+    "https://axiom.trade/t/Ers7WdcTifngX9MSjmSiQ7fDTy2TSiCXZ5W962YQpump",
 };
 
 export const MARKET_CAP_CONFIG = {
