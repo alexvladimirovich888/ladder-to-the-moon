@@ -10,6 +10,8 @@ const desiredPosition = new THREE.Vector3();
 
 const ZOOM_MIN = -6;
 const ZOOM_MAX = 190;
+const INTRO_DISTANCE = 165;
+const INTRO_DURATION = 3.6;
 
 export default function CameraRig() {
   const { camera, pointer, gl } = useThree();
@@ -17,6 +19,7 @@ export default function CameraRig() {
   const targetZoom = useRef(0);
   const appliedZoom = useRef(0);
   const pinchDistance = useRef<number | null>(null);
+  const introStart = useRef<number | null>(null);
 
   useEffect(() => {
     const el = gl.domElement;
@@ -75,6 +78,15 @@ export default function CameraRig() {
     const progress = sceneRuntime.visibleProgress;
     const time = state.clock.elapsedTime;
 
+    if (introStart.current === null) introStart.current = time;
+    const introT = THREE.MathUtils.clamp(
+      (time - introStart.current) / INTRO_DURATION,
+      0,
+      1
+    );
+    const introEase = 1 - Math.pow(1 - introT, 3);
+    const introOffset = INTRO_DISTANCE * (1 - introEase);
+
     dolly.current = THREE.MathUtils.damp(dolly.current, progress, 0.8, delta);
     appliedZoom.current = THREE.MathUtils.damp(
       appliedZoom.current,
@@ -84,8 +96,8 @@ export default function CameraRig() {
     );
     sceneRuntime.userZoom = appliedZoom.current / ZOOM_MAX;
 
-    const baseZ = 26 + dolly.current * 104 + appliedZoom.current;
-    const baseY = 4 + dolly.current * 40 + appliedZoom.current * 0.34;
+    const baseZ = 26 + dolly.current * 104 + appliedZoom.current + introOffset;
+    const baseY = 4 + dolly.current * 40 + appliedZoom.current * 0.34 + introOffset * 0.34;
 
     const idleX = Math.sin(time * 0.06) * 1.2;
     const idleY = Math.cos(time * 0.05) * 0.6;
@@ -101,7 +113,11 @@ export default function CameraRig() {
 
     camera.position.lerp(desiredPosition, 1 - Math.pow(0.001, delta));
 
-    lookAtTarget.set(0, 6 + dolly.current * 34 + appliedZoom.current * 0.16, 0);
+    lookAtTarget.set(
+      0,
+      6 + dolly.current * 34 + appliedZoom.current * 0.16 + introOffset * 0.16,
+      0
+    );
     camera.lookAt(lookAtTarget);
   });
 
